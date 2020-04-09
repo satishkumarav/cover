@@ -13,7 +13,7 @@ app = Flask(__name__)
 app.config.from_object('config.Config')
 app.config["DEBUG"]
 
-app.register_blueprint(api.blueprint,url_prefix='/corona/api/v1.0')
+app.register_blueprint(api.blueprint,url_prefix='/cover/api/v1.0')
 api.add_resource(LocationList, '/locations')
 
 sqlconfig = configparser.ConfigParser()
@@ -22,7 +22,6 @@ sqlconfig.optionxform = str
 sqlconfig.read(os.path.join(basedir,"SQL.properties"))
 for section in sqlconfig.sections():
     for (k,v) in sqlconfig.items(section):
-        print (k,v)
         app.config[k]=v
 
 

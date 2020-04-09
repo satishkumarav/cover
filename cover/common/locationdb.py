@@ -1,25 +1,10 @@
-from typing import List
-
-from lxml import html
-import requests
-import urllib
-import bs4
-import ssl
-import lxml
-import pandas as pd
-from pathlib import Path
-import os
-import pytz
-from datetime import datetime
-import psycopg2
-from pgcopy import CopyManager
-import schedule
-import time
-import configparser
-import enum
 import json
-from psycopg2.extras import RealDictCursor, DictCursor, NamedTupleCursor
+from datetime import datetime
+
+import psycopg2
 from flask import current_app as app
+from psycopg2.extras import RealDictCursor
+
 
 def getLocations(location=None, breakdown=False, historical=False, limit=1000, totime=None, fromtime=None):
     # Read Configuration Information
