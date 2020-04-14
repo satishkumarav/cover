@@ -1,4 +1,4 @@
-import json
+import simplejson as json
 from datetime import datetime
 
 import psycopg2
@@ -63,6 +63,7 @@ def getLocations(location=None, breakdown=False, historical=False, limit=1000, t
 
         if jsonformat:
             res = transform(cursor.fetchall(),rowwise)
+            #result = json.dumps(res, default=str)
             result = json.dumps(res, default=str)
             return result
         else:
@@ -89,3 +90,8 @@ def transform(result,rowwise):
         else:
             finalRes[x["location"]] = [x]
     return finalRes
+
+def default(obj):
+    if isinstance(obj, Decimal):
+        return str(obj)
+    raise TypeError("Object of type '%s' is not JSON serializable" % type(obj).__name__)
