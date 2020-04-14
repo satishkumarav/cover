@@ -18,6 +18,9 @@ class LocationList(Resource):
         self.reqparse.add_argument('historical', type=bool,
                                    help='True or False',
                                    location='json')
+        self.reqparse.add_argument('rowwise', type=bool,
+                                   help='True or False',
+                                   location='json')
         self.reqparse.add_argument('limit', type=int,
                                    help='int, default is 1000', default=1000,
                                    location='json')
@@ -54,13 +57,17 @@ class LocationList(Resource):
         if args['historical']:
             historical = True
 
+        rowwise = False
+        if args['rowwise']:
+            rowwise = True
+
         limit = args['limit']
         fromtime = args['fromtime']
         totime = args['totime']
 
         # Call location db to get the details
         jsonObj = locationdb.getLocations(location=location, breakdown=breakdown,
-                                          historical=historical, limit=limit, fromtime=fromtime, totime=totime)
+                                          historical=historical, limit=limit, fromtime=fromtime, totime=totime,rowwise=rowwise)
 
         # format the response
         response = make_response(jsonObj)

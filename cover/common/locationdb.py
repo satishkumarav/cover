@@ -6,7 +6,7 @@ from flask import current_app as app
 from psycopg2.extras import RealDictCursor
 
 
-def getLocations(location=None, breakdown=False, historical=False, limit=1000, totime=None, fromtime=None):
+def getLocations(location=None, breakdown=False, historical=False, limit=1000, totime=None, fromtime=None,rowwise=False):
     # Read Configuration Information
     #config = configparser.ConfigParser()
     #config.read('../environment.properties')
@@ -62,7 +62,7 @@ def getLocations(location=None, breakdown=False, historical=False, limit=1000, t
                     cursor.execute(query, ({'locationparent': location, 'fromtime': fromtime, 'totime': totime}))
 
         if jsonformat:
-            res = transform(cursor.fetchall())
+            res = transform(cursor.fetchall(),rowwise)
             result = json.dumps(res, default=str)
             return result
         else:
@@ -77,9 +77,11 @@ def getLocations(location=None, breakdown=False, historical=False, limit=1000, t
             connection.close()
 
 #Transforms the JSON Object
-def transform(result):
+def transform(result,rowwise):
     finalRes = {}
     # print(result)
+    if rowwise == True:
+        return result
     for x in result:
         if x['location'] in finalRes:
         #if finalRes[x["location"]]:
