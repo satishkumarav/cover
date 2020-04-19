@@ -35,8 +35,8 @@ Example JSON
 | India                    | MOHI          | All the States data from Jan 20th to current dae, India - from MOH   |
 | Telangana                | MOHT          | Telangana district for April 15th (WIP)                              |
 
-### List supported countries
-
+### List of the supported countries
+```
 Italy
 Jamaica
 Japan
@@ -79,9 +79,9 @@ Iran
 Iraq
 Ireland
 Israel
-
-### List of Supported States for India
-
+```
+### List of the supported states for India
+```Python
 AndamanandNicobarIslands
 AndhraPradesh
 ArunachalPradesh
@@ -115,8 +115,9 @@ Tripura
 UttarPradesh
 Uttarakhand
 WestBengal
-
-### List Districts for Telangana
+```
+### List of the districts for Telangana
+```
 Adilabad
 Asifabad
 Badradri
@@ -145,4 +146,4 @@ Siddipet
 Suryapet
 Vikarabad
 WarangalUrban
-
+```
