@@ -38,7 +38,7 @@ Example JSON
 | India                    | MOHI          | All the States data from Jan 20th to current dae, India - from MOH   |
 | Telangana                | MOHT          | All districts for April 15th (WIP)                                   |
 | Rajasthan                | MOHRJ         | All districts for April 19th                                         |
-| Punjab                   | MOHPJB        | All districts for April 19th                                         |
+| Punjab                   | MOHPJB        | All districts for April 20th                                         |
 
 
 
