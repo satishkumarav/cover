@@ -13,19 +13,22 @@ Example JSON
     "historical": true,
     "rowwise": true,
     "fromtime": "2020-04-01",
-    "totime": "2020-04-13"
+    "totime": "2020-04-13",
+    "source":"MOHRJ"
 }
 ```
 
 
-| Request Parameter        | Require       | Usage                                                                |
-| :------------------------|:--------------| :--------------------------------------------------------------------|
-| location                 | yes           | World or Country or City or District                                 |
-| breakdown                | yes           | false - specified location, true - regions belonging to location     |
-| historical               | yes           | false - latest record, true - all the historical records             |
-| fromtime                 | no            | if historical = true, from which date YYYY-MM-DD format              |
-| totime                   | no            | if historical = true, to which date YYYY-MM-DD format                |
-| rowwis                   | no            | if true, display by timestamp order, false - group by lo             |
+| Request Parameter        | Require       | Usage                                                                                            |
+| :------------------------|:--------------| :------------------------------------------------------------------------------------------------|
+| location                 | yes           | World or Country or City or District                                                             |
+| breakdown                | yes           | false - specified location, true - regions belonging to location                                 |
+| historical               | yes           | false - latest record, true - all the historical records                                         |
+| fromtime                 | no            | if historical = true, from which date YYYY-MM-DD format                                          |
+| totime                   | no            | if historical = true, to which date YYYY-MM-DD format                                            |
+| rowwis                   | no            | if true, display by timestamp order, false - group by lo                                         |
+| source                   | yes           | strongly recommended, World - JHCSEE,India - MOHI, RAJASTHAN - MOHRJ , Telangana - MOHT          |
+
 
 ## Data
 
@@ -33,7 +36,9 @@ Example JSON
 | :------------------------|:--------------| :--------------------------------------------------------------------|
 | World                    | John Hopkins  | All the countries data from Jan 20th to April 16, India - from MOH   |
 | India                    | MOHI          | All the States data from Jan 20th to current dae, India - from MOH   |
-| Telangana                | MOHT          | Telangana district for April 15th (WIP)                              |
+| Telangana                | MOHT          | All districts for April 15th (WIP)                                   |
+| Rajasthan                | MOHRJ         | All districts for April 19th                                         |
+
 
 ### List of the supported countries
 ```
