@@ -18,12 +18,14 @@ def getLocations(location=None, breakdown=False, historical=False, limit=1000, t
     try:
         # Get Source
 
+        # Create connection and cursor
+        connection = psycopg2.connect(CONNECTIONURI)
+
         if source is None:
             source = getSourceQueryString(location)
             # Todo: Incase of ambigious situation, consider whole database
 
-        # Create connection and cursor
-        connection = psycopg2.connect(CONNECTIONURI)
+
         if jsonformat:
             # Todo: Add logic to deal with prepared statement
             cursor = connection.cursor(cursor_factory=RealDictCursor)
@@ -88,10 +90,10 @@ def getSourceQueryString(location):
     # JHCSEE
     # MOHRJ
     # MOHT
-    srcDict = dict({"India": "MOHI", "Telangana": "MOHT", "Rajasthan": "MOHRJ", "World": "JHCSEE"})
-    srcQry = srcDict[location]
-    # Todo: Incase in abmigious situation, you search whole data base
-    if srcQry == None:
+    srcDict = dict({"India": "MOHI", "Telangana": "MOHT", "Rajasthan": "MOHRJ", "World": "JHCSEE", "Punjab":"MOHPJB"})
+    try:
+        srcQry = srcDict[location]
+    except KeyError as error:
         srcQry = "MOHI"
 
     return srcQry
