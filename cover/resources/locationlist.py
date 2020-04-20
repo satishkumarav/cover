@@ -30,6 +30,9 @@ class LocationList(Resource):
         self.reqparse.add_argument('totime', type=lambda x: datetime.strptime(x, '%Y-%m-%d'),
                                    help='UTC Time (format, YYYY-MM-DD)', default=None,
                                    location='json')
+        self.reqparse.add_argument('source', type=str,
+                                   help='source of data string', default=None,
+                                   location='json')
 
         super(LocationList, self).__init__()
 
@@ -64,10 +67,12 @@ class LocationList(Resource):
         limit = args['limit']
         fromtime = args['fromtime']
         totime = args['totime']
+        source = args['source']
+
 
         # Call location db to get the details
         jsonObj = locationdb.getLocations(location=location, breakdown=breakdown,
-                                          historical=historical, limit=limit, fromtime=fromtime, totime=totime,rowwise=rowwise)
+                                          historical=historical, limit=limit, fromtime=fromtime, totime=totime,rowwise=rowwise,source=source)
 
         # format the response
         response = make_response(jsonObj)

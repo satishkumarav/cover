@@ -6,23 +6,27 @@ from flask import current_app as app
 from psycopg2.extras import RealDictCursor
 
 
-def getLocations(location=None, breakdown=False, historical=False, limit=1000, totime=None, fromtime=None,rowwise=False):
+def getLocations(location=None, breakdown=False, historical=False, limit=1000, totime=None, fromtime=None,
+                 rowwise=False, source=None):
     # Read Configuration Information
-    #config = configparser.ConfigParser()
-    #config.read('../environment.properties')
-    #CONNECTIONURI = config['DB']['DBURL']
+    # config = configparser.ConfigParser()
+    # config.read('../environment.properties')
+    # CONNECTIONURI = config['DB']['DBURL']
     CONNECTIONURI = app.config["DATABASE_URI"]
     jsonformat = True
     timeflag = False
     try:
+        # Get Source
+
+        if source is None:
+            source = getSourceQueryString(location)
+            # Todo: Incase of ambigious situation, consider whole database
 
         # Create connection and cursor
         connection = psycopg2.connect(CONNECTIONURI)
         if jsonformat:
             # Todo: Add logic to deal with prepared statement
             cursor = connection.cursor(cursor_factory=RealDictCursor)
-            # cursor = connection.cursor(cursor_factory=NamedTupleCursor)
-            # cursor = connection.cursor()
 
         else:
             cursor = connection.cursor()
@@ -51,19 +55,19 @@ def getLocations(location=None, breakdown=False, historical=False, limit=1000, t
             if not breakdown:
                 query = selectFragment + bylocationFragment
                 if not timeflag:
-                    cursor.execute(query, {'location': location})
+                    cursor.execute(query, {'source': source, 'location': location})
                 else:
-                    cursor.execute(query, ({'location': location, 'fromtime': fromtime, 'totime': totime}))
+                    cursor.execute(query, ({'source': source, 'location': location, 'fromtime': fromtime, 'totime': totime}))
             else:
                 query = selectFragment + bylocationParentFragment
                 if not timeflag:
-                    cursor.execute(query, {'locationparent': location})
+                    cursor.execute(query, {'source': source, 'locationparent': location})
                 else:
-                    cursor.execute(query, ({'locationparent': location, 'fromtime': fromtime, 'totime': totime}))
+                    cursor.execute(query, ({'source': source, 'locationparent': location, 'fromtime': fromtime, 'totime': totime}))
 
         if jsonformat:
-            res = transform(cursor.fetchall(),rowwise)
-            #result = json.dumps(res, default=str)
+            res = transform(cursor.fetchall(), rowwise)
+            # result = json.dumps(res, default=str)
             result = json.dumps(res, default=str)
             return result
         else:
@@ -77,21 +81,32 @@ def getLocations(location=None, breakdown=False, historical=False, limit=1000, t
             cursor.close()
             connection.close()
 
-#Transforms the JSON Object
-def transform(result,rowwise):
+
+def getSourceQueryString(location):
+    srcqrystr = None
+    # MOHI
+    # JHCSEE
+    # MOHRJ
+    # MOHT
+    srcDict = dict({"India": "MOHI", "Telangana": "MOHT", "Rajasthan": "MOHRJ", "World": "JHCSEE"})
+    srcQry = srcDict[location]
+    # Todo: Incase in abmigious situation, you search whole data base
+    if srcQry == None:
+        srcQry = "MOHI"
+
+    return srcQry
+
+
+# Transforms the JSON Object
+def transform(result, rowwise):
     finalRes = {}
     # print(result)
     if rowwise == True:
         return result
     for x in result:
         if x['location'] in finalRes:
-        #if finalRes[x["location"]]:
+            # if finalRes[x["location"]]:
             finalRes[x["location"]].append(x)
         else:
             finalRes[x["location"]] = [x]
     return finalRes
-
-def default(obj):
-    if isinstance(obj, Decimal):
-        return str(obj)
-    raise TypeError("Object of type '%s' is not JSON serializable" % type(obj).__name__)
